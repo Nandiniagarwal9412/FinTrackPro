@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinTrack Pro | Personal Finance Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="brand">◈ FinTrack <span>Pro</span></div>
+  <div class="navlinks"><button id="navDashboard" class="active" onclick="showPage('dashboard')">Dashboard</button><button id="navSettings" onclick="showPage('settings')">Settings</button></div>
+  <div class="actions"><button class="btn primary" onclick="openModal()">＋ Add Transaction</button><button class="btn secondary" onclick="logout()">Logout</button></div>
+</nav>
+<main>
+<section id="dashboard" class="page active">
+  <div class="pagehead"><div><h1 id="welcome">Good day 👋</h1><p>Here’s your personal financial overview.</p></div></div>
+  <div class="cards">
+    <article class="stat balance"><div class="stat-label">Current Balance</div><div class="stat-value" id="balance">₹0.00</div><div class="stat-note">Income minus expenses</div></article>
+    <article class="stat income"><div class="stat-label">Total Income</div><div class="stat-value" id="incomeTotal">₹0.00</div><div class="stat-note">All income transactions</div></article>
+    <article class="stat expense"><div class="stat-label">Total Expense</div><div class="stat-value" id="expenseTotal">₹0.00</div><div class="stat-note">All expense transactions</div></article>
+    <article class="stat"><div class="stat-label">Transactions</div><div class="stat-value" id="transactionCount">0</div><div class="stat-note">Records saved</div></article>
+  </div>
+  <section class="panel"><div class="panel-title"><h2>Cash Flow</h2><span style="font-size:12px;color:var(--muted)">Income vs. expenses by date</span></div><div class="chart-wrap"><canvas id="cashFlowChart"></canvas></div></section>
+  <section class="panel"><div class="panel-title"><h2>Recent Transactions</h2><div class="filters"><button class="active" data-filter="all" onclick="setFilter('all',this)">All Types</button><button data-filter="income" onclick="setFilter('income',this)">Income Only</button><button data-filter="expense" onclick="setFilter('expense',this)">Expense Only</button></div></div>
+  <div class="table-wrap"><table><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Type</th><th>Amount</th><th>Action</th></tr></thead><tbody id="transactionRows"></tbody></table><div id="emptyState" class="empty">No transactions yet. Add your first transaction to get started.</div></div></section>
+</section>
+<section id="settings" class="page">
+  <div class="pagehead"><div><h1>Settings</h1><p>Manage your profile and preferences.</p></div></div>
+  <div class="settings-grid">
+    <section class="setting-card"><h2>Profile Preferences</h2><div class="field"><label for="displayName">Display Name</label><input id="displayName" maxlength="60" placeholder="Enter your name"></div><div class="field"><label for="currency">Preferred Currency</label><select id="currency"><option value="INR">INR — ₹ Indian Rupee</option><option value="USD">USD — $ US Dollar</option><option value="EUR">EUR — € Euro</option><option value="GBP">GBP — £ British Pound</option><option value="JPY">JPY — ¥ Japanese Yen</option></select></div><button class="btn primary" onclick="saveProfile()">Save Preferences</button></section>
+    <section class="setting-card"><h2>Appearance</h2><div class="toggle-row"><div><strong>Dark Mode</strong><div style="font-size:12px;color:var(--muted);margin-top:5px">Use a darker color theme</div></div><button id="themeToggle" class="toggle" aria-label="Toggle dark mode" onclick="toggleTheme()"></button></div><hr style="border:0;border-top:1px solid var(--line);margin:10px 0 20px"><h2 style="margin-bottom:10px">Data Management</h2><p style="font-size:13px;color:var(--muted);line-height:1.6">Your transactions and preferences are stored locally in this browser. Reset will remove all FinTrack Pro data from this browser.</p><button class="btn danger" onclick="resetData()">Reset All Data</button></section>
+  </div>
+</section>
+</main>
+<div id="modalBackdrop" class="modal-backdrop" onclick="backdropClose(event)"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><h2 id="modalTitle">Add Transaction</h2><button class="close" onclick="closeModal()" aria-label="Close">×</button></div>
+<form id="transactionForm"><div class="field"><label for="type">Transaction Type</label><select id="type" required><option value="expense">Expense</option><option value="income">Income</option></select></div><div class="field"><label for="description">Description</label><input id="description" placeholder="e.g. Monthly salary" maxlength="100" required></div><div class="field"><label for="amount">Amount</label><input id="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required></div><div class="field"><label for="date">Date</label><input id="date" type="date" required></div><div class="field"><label for="category">Category</label><select id="category" required><option>Food &amp; Dining</option><option>Shopping</option><option>Recharge &amp; Bills</option><option>Petrol &amp; Auto</option><option>Utilities</option><option>Salary</option><option>Entertainment</option><option>Other</option></select></div><div class="modal-actions"><button type="button" class="btn secondary" onclick="closeModal()">Cancel</button><button type="submit" class="btn primary">Save Transaction</button></div></form></div></div>
+<div id="toast" class="toast" role="status"></div>
+<script src="script.js"></script>
+</body>
+</html>
